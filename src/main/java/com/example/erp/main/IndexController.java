@@ -32,7 +32,7 @@ public class IndexController {
 	
 	@GetMapping("/emp/login.do")
 	public String login() {
-		return "login";
+		return "emp/login";
 	}
 	
 	@GetMapping("/menu/board.do")
