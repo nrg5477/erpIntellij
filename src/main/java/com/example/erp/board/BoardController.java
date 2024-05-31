@@ -106,7 +106,7 @@ public class BoardController {
 		//스프링이 만들어준 모델객체에 공유할 데이터를 공유
 		model.addAttribute("board", board);
 		model.addAttribute("boardfiledtolist",boardfiledtolist);
-		//모델객체에 데이터를 공유했으므로 뷰정보만 리턴
+		//모델객체에 데이터를 공유했으므로 뷰정보만 리턴fd
 		return view;
 	}
 	
