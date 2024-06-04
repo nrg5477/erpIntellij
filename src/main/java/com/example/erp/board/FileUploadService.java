@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,22 +14,29 @@ import com.example.erp.dto.BoardFileDTO;
 
 @Service
 public class FileUploadService {
+	//설정 파일에 정의된 property정보를 가져와서 설정한 경로에 파일업로드가 되도록 수정
+	@Value("${file.dir}")
+	private String uploadpath;
+	//파일명을 전달받아서 업로드 폴더 경로와 연겨해서 path를 리턴하는 메소드
+	public String getUploadpath(String filename){
+		return uploadpath + filename;
+	}
 	//파일 업로드를 수행하는 메소드 - 파일업로드를 하기 위해서 List<MultipartFile> 객체와 실제 업로드할 위치를 매개변수로 전달 받아 사용
 	//업로드되는 파일의 정보를 List<BoardFileDTO>로 만들어서 반환
-	public List<BoardFileDTO> uploadFiles(List<MultipartFile> multipartFiles, String path) throws IllegalStateException, IOException {
+	public List<BoardFileDTO> uploadFiles(List<MultipartFile> multipartFiles) throws IllegalStateException, IOException {
 		//게시글 등록
 		List<BoardFileDTO> filedtolist = new ArrayList<BoardFileDTO>();
 		for(MultipartFile multipartFile : multipartFiles) {
 			if(!multipartFile.isEmpty()) {
 				//파일명
-				String storeFilename = uploadFile(multipartFile,path);
+				String storeFilename = uploadFile(multipartFile);
 				filedtolist.add(new BoardFileDTO(UUID.randomUUID().toString(),null,multipartFile.getOriginalFilename(),storeFilename));
 			}
 		}
 		return filedtolist;
 	}
 	
-	public String uploadFile(MultipartFile multipartFile, String path) throws IllegalStateException, IOException {
+	public String uploadFile(MultipartFile multipartFile) throws IllegalStateException, IOException {
 		//회원등록
 	  
 		String storeFilename="";
@@ -37,7 +45,7 @@ public class FileUploadService {
 	    	System.out.println("널이 아니게 들어옴");
 	        String originalFilename = multipartFile.getOriginalFilename();
 	        storeFilename = createStoreFilename(originalFilename);
-	        multipartFile.transferTo(new File(path + File.separator + storeFilename));
+	        multipartFile.transferTo(new File(getUploadpath(storeFilename)));
 	        
 	        return storeFilename;
 	    } else {

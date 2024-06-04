@@ -52,7 +52,7 @@ public class BoardController {
 	
 	@GetMapping("/write")
 	public String writePage() {
-		return "board/writepage";
+		return "board/board_write";
 	}
 	
 	//사용자가 입력한 데이터와 업로드할 파일에 대한 정보를 같이 받아서 처리할 수 있도록 작업.
@@ -70,11 +70,11 @@ public class BoardController {
 		//	- ServletContext객체는 프로젝트(context)에 대한 정보를 담고 있는 개체이고 이 안에 실제 경로를
 		//		구할 수 있는 기능이 있음.
 		//	- ServletContext는 세션객체를 통해 생성
-		String path = WebUtils.getRealPath(session.getServletContext(), "/WEB-INF/upload");
-		System.out.println("^^^^^^^^^^^^"+path);
+		//String path = WebUtils.getRealPath(session.getServletContext(), "/WEB-INF/upload");
+		//System.out.println("^^^^^^^^^^^^"+path);
 		
 		// 3. 업로드로직을 처리하는 서비스의 메소드를 호출 
-		List<BoardFileDTO> boardfiledtolist = fileuploadService.uploadFiles(file, path);
+		List<BoardFileDTO> boardfiledtolist = fileuploadService.uploadFiles(file);
 		System.out.println(boardfiledtolist);
 		service.insert(board, boardfiledtolist);
 		return "redirect:/board/list?category=all";
@@ -92,16 +92,16 @@ public class BoardController {
 	
 	//Model타입의 변수model 매개변수를 정의하면 스프링내부에서 데이터를 담을 수 있는 모델객체를 만들어서 넘겨준다. 
 	@GetMapping("/read")
-	public String read(String board_no, String action, Model model) {
+	public String read(@RequestParam("board_no") String board_no, @RequestParam("action") String action, Model model) {
 		System.out.println(board_no+"====read board_no");
 		BoardDTO board = service.getBoardInfo(board_no);
 		List<BoardFileDTO> boardfiledtolist = service.getFileList(board_no);
 		System.out.println(action+"====read action");
 		String view="";
 		if(action.equals("READ")) {
-			view = "board/read";
+			view = "board/board_read";
 		} else {
-			view = "board/update";
+			view = "board/board_update";
 		}
 		//스프링이 만들어준 모델객체에 공유할 데이터를 공유
 		model.addAttribute("board", board);
@@ -111,7 +111,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/delete")
-	public String delete(String board_no) {
+	public String delete(@RequestParam("board_no") String board_no) {
 		System.out.println(board_no+"===delete");
 		service.delete(board_no);
 		return "redirect:/board/list?category=all";
@@ -128,7 +128,7 @@ public class BoardController {
 	//ResponseEntity는 spring mvc에서 http응답을 지정하기 위해서 사용하는 클래스
 	//사용자가 원하는 응답형식으로 응답하는 경우
 	@GetMapping("/download/{id}/{board_no}/{boardFileno}")
-	public ResponseEntity<UrlResource> downloadFile(@PathVariable String id, @PathVariable String board_no, @PathVariable String boardFileno, HttpSession session) throws MalformedURLException, FileNotFoundException {
+	public ResponseEntity<UrlResource> downloadFile(@PathVariable(name="id") String id, @PathVariable(name="board_no") String board_no, @PathVariable(name="boardFileno") String boardFileno, HttpSession session) throws MalformedURLException, FileNotFoundException {
 		//System.out.println(id+","+board_no+","+boardFileno);
 		
 		//1. 파일을 다운로드 하기 위해 디비에 저장된 파일의 정보를 가져오기 - 다운로드를 요청한 파일의 정보
@@ -138,7 +138,7 @@ public class BoardController {
 		//UrlResource resource = new UrlResource("file:"+파일의 full path) : 실제 파일의 위치
 		//업로드된 서버의 위치에서 다운로드할 경로와 파일명을 연결해서 full path를 생성
 		//file: 은 가져올 자원이 파일시스템에 존재한다는 것을 명시
-		UrlResource resource = new UrlResource("file:"+WebUtils.getRealPath(session.getServletContext(), "/WEB-INF/upload/"+selectfileinfo.getStoreFilename()));
+		UrlResource resource = new UrlResource("file:"+fileuploadService.getUploadpath(selectfileinfo.getStoreFilename()));
 		
 		//3. 파일명(다운로드되는 파일명)에 한글이 있는 경우 오류가 발생되지 않도록 하기 위해서 처리
 		String encodedFilename  = UriUtils.encode(selectfileinfo.getOriginalFilename(), "UTF-8");

@@ -120,12 +120,12 @@ public class MemberController {
 	public String insert(MemberDTO member, HttpSession session) throws IllegalStateException, IOException {
 		//1. 파일 업로드
 	    MultipartFile file = member.getUserImage();
-	    String path = WebUtils.getRealPath(session.getServletContext(), "/WEB-INF/static/images");
-	    System.out.println("memberinsert path : " + path);
+//	    String path = WebUtils.getRealPath(session.getServletContext(), "/WEB-INF/static/images");
+//	    System.out.println("memberinsert path : " + path);
 	    System.out.println("memberinsert file : " + file);
 	    System.out.println("member : " + member);
 	  
-	    String storeFileName = fileuploadService.uploadFile(file, path);
+	    String storeFileName = fileuploadService.uploadFile(file);
 	    
 	    member.setProfile_photo(storeFileName);
 	    System.out.println("member : " + member);
