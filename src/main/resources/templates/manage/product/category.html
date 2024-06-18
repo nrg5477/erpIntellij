@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+
+</head>
+
+<body>
+<div class="container-fluid" layout:fragment="content">
+    <h1>카테고리 등록</h1>
+    <hr/>
+    <form  class="form-horizontal"  action="/erp/category/write"   method="POST" name="myform">
+        <fieldset>
+            <div class="form-group">
+                <!-- 카테고리명-->
+                <div><a href="/erp/catgory/list">카테고리목록</a></div>
+            </div>
+            <div class="form-group">
+                <!-- 카테고리명-->
+                <label class="control-label col-sm-2" for="categoryName">카테고리명</label>
+                <div class="col-sm-3">
+                    <input type="text" id="categoryName" name="categoryName"
+                           placeholder="카테고리명"
+                           class="form-control"  >
+
+                </div>
+            </div>
+            <div class="form-group">
+                <!-- 비고-->
+                <label class="control-label col-sm-2" for="info">비고</label>
+                <div class="col-sm-3">
+                    <input type="text" id="info" name="info"
+                           placeholder="비고"
+                           class="form-control"  >
+
+                </div>
+            </div>
+            <div class="form-group">
+                <!-- Button -->
+                <div class="col-sm-3 col-sm-offset-2">
+                    <input type="submit" value="등록하기" class="btn btn-success"/>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>
