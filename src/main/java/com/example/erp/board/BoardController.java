@@ -157,7 +157,7 @@ public class BoardController {
 	//mainContent.jsp에서 ajax로 요청될 메소드
 	@GetMapping("/ajax/list")
 	@ResponseBody
-	public List<BoardDTO> ajaxlist(String category){
+	public List<BoardDTO> ajaxlist(@RequestParam("category") String category){
 		List<BoardDTO> jsonarr = service.findByCategory(category);
 		System.out.println("jsonarr : "+jsonarr);
 		return jsonarr;
