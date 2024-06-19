@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 //API패키지의 모든 컨트롤러는 RestController
 //JSON을 리턴하는 메소드
 @RestController
@@ -37,5 +39,17 @@ public class CategoryAPIController {
     @GetMapping("/category/{categoryId}")
     public CategoryResponseDTO read(@PathVariable("categoryId") String categoryId) {
         return categoryService.findById(Long.parseLong(categoryId));
+    }
+
+    //뷰가 없어서 처리결과를 JSON으로 만들어서 리턴 - Ajax요청결과
+    //뷰로 리스폰스하는 경우는 String으로 리턴하고 결과를 Model에 add시킨다.
+    @GetMapping("/category/list")
+    public List<CategoryResponseDTO> readAll() {
+        return categoryService.findAll();
+    }
+
+    @GetMapping("/category/pagelist")
+    public List<CategoryResponseDTO> pagelist() {
+        return categoryService.pagingFindAll();
     }
 }

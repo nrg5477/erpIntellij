@@ -26,6 +26,8 @@ public class CategoryEntity {
         this.categoryName = categoryName;
         this.info = info;
     }
+
+
 }
 
 

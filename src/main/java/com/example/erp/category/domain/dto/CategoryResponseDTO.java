@@ -1,5 +1,6 @@
 package com.example.erp.category.domain.dto;
 
+import com.example.erp.category.domain.entity.CategoryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class CategoryResponseDTO {
     private String categoryName;
     private String info;
 
-    public CategoryResponseDTO(com.example.erp.category.domain.entity.CategoryEntity categoryEntity) {
+    public CategoryResponseDTO(CategoryEntity categoryEntity) {
         this.categoryId = categoryEntity.getCategoryId();
         this.categoryName = categoryEntity.getCategoryName();
         this.info = categoryEntity.getInfo();
